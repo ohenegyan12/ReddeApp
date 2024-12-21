@@ -39,12 +39,6 @@ struct OTPView: View {
                         isInputValid = true
                     }
                 }
-                .keyboardType(.numberPad) // Allow only numbers
-                .onReceive(otpCode.publisher.collect()) { newValue in
-                    if newValue.count > 6 {
-                        otpCode = String(newValue.prefix(6)) // Limit to 6 digits
-                    }
-                }
                 .padding()
                 .background(
                     RoundedRectangle(cornerRadius: 12)
@@ -66,9 +60,8 @@ struct OTPView: View {
                     .foregroundColor(.gray)
                 Button(action: {
                     // Handle resend action
-                    // You can trigger your resend OTP logic here
                 }) {
-                    Text("Resend code")
+                    Text("Resent code")
                         .foregroundColor(.red)
                 }
             }
@@ -106,7 +99,7 @@ struct OTPView: View {
         }
         
         // Add your submission logic here
-        // If OTP is valid, you can proceed with the next action
+        // You can add additional validation for alpha/numeric/alphanumeric if needed
     }
 }
 

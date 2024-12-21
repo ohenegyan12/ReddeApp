@@ -5,6 +5,7 @@ struct LoginSignupView: View {
     @State private var showAlert: Bool = false
     @State private var isEmailValid: Bool = true
     @State private var navigateToOTP = false
+    @State private var navigateToRegistration = false
     
     var body: some View {
         NavigationStack {
@@ -73,7 +74,7 @@ struct LoginSignupView: View {
                     Text("New to Redde?")
                         .foregroundColor(.gray)
                     Button(action: {
-                        // Handle create account action
+                        navigateToRegistration = true
                     }) {
                         Text("Create an account")
                             .foregroundColor(.red)
@@ -94,6 +95,9 @@ struct LoginSignupView: View {
                 PasswordView()
                     .navigationBarBackButtonHidden()
             }
+            .navigationDestination(isPresented: $navigateToRegistration) {
+                Registration()
+            }
         }
     }
     
@@ -101,6 +105,14 @@ struct LoginSignupView: View {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
         let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
         return emailTest.evaluate(with: email)
+    }
+}
+
+struct RegistrationView: View {
+    var body: some View {
+        Text("Registration Page")
+            .font(.title)
+            .padding()
     }
 }
 
