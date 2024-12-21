@@ -5,6 +5,7 @@ struct PasswordView: View {
     @State private var isPasswordVisible: Bool = false
     @State private var showAlert: Bool = false
     @State private var isPasswordFieldInvalid: Bool = false
+    @State private var navigateToOTP = false // State for Navigation
 
     var body: some View {
         NavigationStack {
@@ -40,7 +41,7 @@ struct PasswordView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 20)
-                .padding(.top, 50)
+                .padding(.top, 30)
 
                 // Password Field Section
                 VStack(alignment: .leading, spacing: 8) {
@@ -86,19 +87,25 @@ struct PasswordView: View {
                 Spacer() // Pushes the button to the bottom
 
                 // Log In Button
-                Button(action: {
-                    validatePassword()
-                }) {
-                    Text("Log in")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color(hex: "BD0910"))
-                        .cornerRadius(8)
-                }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 20)
+                NavigationLink(
+                    destination: OTPView(), // Navigate to OTPView when clicked
+                    isActive: $navigateToOTP,
+                    label: {
+                        Button(action: {
+                            validatePassword()
+                        }) {
+                            Text("Log in")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color(hex: "BD0910"))
+                                .cornerRadius(8)
+                        }
+                        .padding(.horizontal, 20)
+                        .padding(.bottom, 40)
+                    }
+                )
             }
             .background(Color.white)
             .ignoresSafeArea()
@@ -116,32 +123,9 @@ struct PasswordView: View {
             showAlert = true
         } else {
             isPasswordFieldInvalid = false
-            // Navigate to the OTPView
+            // Set the navigation state to trigger the NavigationLink
+            navigateToOTP = true
         }
-    }
-}
-
-struct OTP: View {
-    var body: some View {
-        VStack {
-            Text("Enter OTP")
-                .font(.title)
-                .fontWeight(.bold)
-            Spacer()
-        }
-        .padding()
-    }
-}
-
-struct LoginSignup: View {
-    var body: some View {
-        VStack {
-            Text("Login or Sign Up")
-                .font(.title)
-                .fontWeight(.bold)
-            Spacer()
-        }
-        .padding()
     }
 }
 
@@ -180,6 +164,22 @@ extension Color {
     }
 }
 
-#Preview {
-    PasswordView()
+// OTPView
+struct OTP: View {
+    var body: some View {
+        VStack {
+            Text("Enter OTP")
+                .font(.title)
+                .fontWeight(.bold)
+            Spacer()
+        }
+        .padding()
+    }
+}
+
+// Preview Section
+struct PasswordView_Previews: PreviewProvider {
+    static var previews: some View {
+        PasswordView()
+    }
 }
