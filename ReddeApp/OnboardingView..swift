@@ -27,30 +27,30 @@ struct OnboardingView: View {
         OnboardingPage(
             title: "Welcome to Redde Online",
             description: "Your trusted platform for seamless online transactions.",
-            imageName: "onboarding1", // Add this to assets
+            imageName: "onboarding1",
             buttonText: "Next"
         ),
         OnboardingPage(
             title: "Fast & Secure Payments",
             description: "Send money, pay merchants, and settle bills with confidence using our trusted payment gateways.",
-            imageName: "onboarding2", // Add this to assets
+            imageName: "onboarding2",
             buttonText: "Next"
         ),
         OnboardingPage(
             title: "Stay in Control",
             description: "Monitor payments, get real-time notifications, and stay updated on all your transactions.",
-            imageName: "onboarding3", // Add this to assets
+            imageName: "onboarding3",
             buttonText: "Get Started"
         )
     ]
     
     var body: some View {
         if isOnboardingComplete {
-            LoginSignupView() // Your main app view
+            LoginSignupView() 
         } else {
             ZStack {
-                // Updated to use #BD0910
-                Color(red: 0.74, green: 0.04, blue: 0.06) // Hex #BD0910
+                
+                Color(red: 0.74, green: 0.04, blue: 0.06) //
                     .ignoresSafeArea()
                 
                 VStack {
@@ -84,21 +84,22 @@ struct OnboardingView: View {
                     Image(pages[currentPage].imageName)
                         .resizable()
                         .scaledToFit()
-                        .frame(height: imageHeight) // Adjustable image size
-                        .padding(.bottom, 20) // Optional spacing
+                        .frame(height: imageHeight)
+                        .padding(.bottom, 20)
                     
                     Spacer()
                     
                     Button(action: {
                         if currentPage == 2 {
-                            isOnboardingComplete = true // This transitions to ContentView
+                            isOnboardingComplete = true
+                            
                         } else {
                             currentPage += 1
                         }
                     }) {
                         Text(pages[currentPage].buttonText)
                             .font(.system(size: 20, weight: .semibold))
-                            .foregroundColor(Color(red: 0.74, green: 0.04, blue: 0.06)) // Hex #BD0910
+                            .foregroundColor(Color(red: 0.74, green: 0.04, blue: 0.06))
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.white)
@@ -111,7 +112,7 @@ struct OnboardingView: View {
     }
 }
 
-// Add preview provider
+
 #Preview {
     OnboardingView()
 }

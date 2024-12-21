@@ -33,7 +33,7 @@ struct SplashScreenView: View {
     }
 }
 
-// Add this preview provider at the bottom of your file
+
 #Preview {
     SplashScreenView()
 }
