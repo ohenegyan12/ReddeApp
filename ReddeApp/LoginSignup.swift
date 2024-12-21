@@ -45,9 +45,12 @@ struct LoginSignupView: View {
                         .padding()
                         .background(
                             RoundedRectangle(cornerRadius: 8)
-                                .stroke(isEmailValid ? Color.gray : Color.red, lineWidth: 1)
+                                .stroke(isEmailValid ? Color.black : Color.red, lineWidth: 1)
                         )
                         .padding(.top, 5)
+                        .foregroundColor(.black) // Add this line to set the text color to black
+                  
+
                     
                     Button(action: {
                         if isValidEmail(email) {

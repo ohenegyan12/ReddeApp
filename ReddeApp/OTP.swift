@@ -23,17 +23,19 @@ struct OTPView: View {
             // Title
             Text("One Time Password")
                 .font(.system(size: 32, weight: .bold))
+                .foregroundColor(.black) // Ensure title text is black
                 .padding(.top, 20)
             
             // Subtitle
             Text("To confirm your account, enter the OTP Code sent to your phone.")
                 .font(.system(size: 16))
-                .foregroundColor(.gray)
+                .foregroundColor(.black) // Ensure subtitle text is black
                 .padding(.top, -10)
             
             // OTP TextField with validation styling
             TextField("OTP Code", text: $otpCode)
                 .textInputAutocapitalization(.characters)
+                .foregroundColor(.black) // Set the input text color to black
                 .onChange(of: otpCode) { _ in
                     if !isInputValid {
                         isInputValid = true
@@ -84,6 +86,7 @@ struct OTPView: View {
         }
         .padding(.horizontal, 20)
         .navigationBarHidden(true)
+        .background(Color.white)  // Explicitly set the background color to white
         .alert("Invalid Input", isPresented: $showError) {
             Button("OK", role: .cancel) {}
         } message: {

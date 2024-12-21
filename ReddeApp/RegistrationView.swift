@@ -9,6 +9,7 @@ struct Registration: View {
     @State private var accountType = "Personal"
     @State private var isPasswordVisible = false
     @State private var isConfirmPasswordVisible = false
+    @State private var showError = false
 
     let redColor = Color(red: 189 / 255, green: 9 / 255, blue: 16 / 255) // #BD0910
 
@@ -20,6 +21,7 @@ struct Registration: View {
                     Text("Create Your Account")
                         .font(.title)
                         .fontWeight(.bold)
+                        .foregroundColor(.black) // Ensure title text is black
                         .frame(maxWidth: .infinity, alignment: .leading)
 
                     // Subtitle
@@ -67,12 +69,14 @@ struct Registration: View {
                                         .background(Color.white)
                                         .cornerRadius(8)
                                         .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1))
+                                        .foregroundColor(.black) // Set text color to black
                                 } else {
                                     SecureField("Password", text: $password)
                                         .padding()
                                         .background(Color.white)
                                         .cornerRadius(8)
                                         .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1))
+                                        .foregroundColor(.black) // Set text color to black
                                 }
                                 Button(action: {
                                     isPasswordVisible.toggle()
@@ -94,12 +98,14 @@ struct Registration: View {
                                         .background(Color.white)
                                         .cornerRadius(8)
                                         .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1))
+                                        .foregroundColor(.black) // Set text color to black
                                 } else {
                                     SecureField("Confirm password", text: $confirmPassword)
                                         .padding()
                                         .background(Color.white)
                                         .cornerRadius(8)
                                         .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1))
+                                        .foregroundColor(.black) // Set text color to black
                                 }
                                 Button(action: {
                                     isConfirmPasswordVisible.toggle()
@@ -156,7 +162,7 @@ struct Registration: View {
 
                     // Sign Up Button
                     Button(action: {
-                        // Handle sign-up action
+                        validateForm()
                     }) {
                         Text("Sign Up")
                             .frame(maxWidth: .infinity)
@@ -182,6 +188,24 @@ struct Registration: View {
                 }
                 .padding()
             }
+            .background(Color.white) // Set the background color to white
+            .alert(isPresented: $showError) {
+                Alert(
+                    title: Text("Missing Fields"),
+                    message: Text("Please fill in all required fields."),
+                    dismissButton: .default(Text("OK"))
+                )
+            }
+        }
+    }
+
+    private func validateForm() {
+        if email.isEmpty || name.isEmpty || phoneNumber.isEmpty || password.isEmpty || confirmPassword.isEmpty {
+            showError = true
+        } else if password != confirmPassword {
+            showError = true
+        } else {
+            // Proceed with sign up logic here
         }
     }
 }
@@ -191,11 +215,19 @@ struct CustomTextField: View {
     @Binding var text: String
 
     var body: some View {
-        TextField(placeholder, text: $text)
-            .padding()
-            .background(Color.white)
-            .cornerRadius(8)
-            .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1))
+        ZStack(alignment: .leading) {
+            if text.isEmpty {
+                Text(placeholder)
+                    .foregroundColor(.gray) // Set the placeholder color to gray
+                    .padding(.leading, 10) // Optional padding to adjust the position of the placeholder
+            }
+            TextField("", text: $text)
+                .padding()
+                .background(Color.white)
+                .cornerRadius(8)
+                .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1))
+                .foregroundColor(.black) // Set text color to black
+        }
     }
 }
 
