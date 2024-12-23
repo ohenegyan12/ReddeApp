@@ -23,30 +23,39 @@ struct OTPView: View {
             // Title
             Text("One Time Password")
                 .font(.system(size: 32, weight: .bold))
-                .foregroundColor(.black) // Ensure title text is black
+                .foregroundColor(.black)
                 .padding(.top, 20)
             
             // Subtitle
             Text("To confirm your account, enter the OTP Code sent to your phone.")
                 .font(.system(size: 16))
-                .foregroundColor(.black) // Ensure subtitle text is black
+                .foregroundColor(.black)
                 .padding(.top, -10)
             
-            // OTP TextField with validation styling
-            TextField("OTP Code", text: $otpCode)
-                .textInputAutocapitalization(.characters)
-                .foregroundColor(.black) // Set the input text color to black
-                .onChange(of: otpCode) { _ in
-                    if !isInputValid {
-                        isInputValid = true
-                    }
+            // OTP TextField with placeholder
+            ZStack(alignment: .leading) {
+                if otpCode.isEmpty {
+                    Text("OTP Code")
+                        .foregroundColor(.gray)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
                 }
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(isInputValid ? Color.gray.opacity(0.3) : Color.red, lineWidth: 1)
-                )
-                .padding(.top, 20)
+                
+                TextField("", text: $otpCode)
+                    .textInputAutocapitalization(.characters)
+                    .foregroundColor(.black)
+                    .onChange(of: otpCode) { _ in
+                        if !isInputValid {
+                            isInputValid = true
+                        }
+                    }
+                    .padding()
+            }
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(isInputValid ? Color.gray.opacity(0.3) : Color.red, lineWidth: 1)
+            )
+            .padding(.top, 20)
             
             // Error message
             if !isInputValid {
@@ -86,7 +95,7 @@ struct OTPView: View {
         }
         .padding(.horizontal, 20)
         .navigationBarHidden(true)
-        .background(Color.white)  // Explicitly set the background color to white
+        .background(Color.white)
         .alert("Invalid Input", isPresented: $showError) {
             Button("OK", role: .cancel) {}
         } message: {
@@ -106,7 +115,6 @@ struct OTPView: View {
     }
 }
 
-// Preview
 #Preview {
     OTPView()
 }

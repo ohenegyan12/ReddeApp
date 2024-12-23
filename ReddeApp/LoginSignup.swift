@@ -38,19 +38,27 @@ struct LoginSignupView: View {
                         .font(.subheadline)
                         .foregroundColor(.gray)
                     
-                    TextField("Email", text: $email)
-                        .keyboardType(.emailAddress)
-                        .autocapitalization(.none)
-                        .textContentType(.emailAddress)
-                        .padding()
-                        .background(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(isEmailValid ? Color.black : Color.red, lineWidth: 1)
-                        )
-                        .padding(.top, 5)
-                        .foregroundColor(.black) // Add this line to set the text color to black
-                  
-
+                    ZStack(alignment: .leading) {
+                        if email.isEmpty {
+                            Text("Email")
+                                .foregroundColor(.gray)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 12)
+                        }
+                        
+                        TextField("", text: $email)
+                            .keyboardType(.emailAddress)
+                            .autocapitalization(.none)
+                            .textContentType(.emailAddress)
+                            .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(isEmailValid ? Color.black : Color.red, lineWidth: 1)
+                            )
+                            .foregroundColor(.black)
+                            .tint(.black)
+                    }
+                    .padding(.top, 5)
                     
                     Button(action: {
                         if isValidEmail(email) {
