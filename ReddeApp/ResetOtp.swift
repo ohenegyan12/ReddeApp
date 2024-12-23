@@ -19,6 +19,7 @@ struct OneTimePasswordView: View {
             VStack(spacing: 8) {
                 Text("One Time Password")
                     .font(.title)
+                    .foregroundColor(.black)
                     .fontWeight(.bold)
                 
                 Text("To confirm your account, enter the OTP Code sent to your phone.")

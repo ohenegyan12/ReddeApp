@@ -1,4 +1,14 @@
 import SwiftUI
+import UIKit
+
+extension UIApplication {
+    func addTapGestureRecognizer() {
+        guard let window = windows.first else { return }
+        let tapGesture = UITapGestureRecognizer(target: window, action: #selector(UIView.endEditing))
+        tapGesture.cancelsTouchesInView = false
+        window.addGestureRecognizer(tapGesture)
+    }
+}
 
 struct Registration: View {
     @State private var email = ""
@@ -21,13 +31,13 @@ struct Registration: View {
                     Text("Create Your Account")
                         .font(.title)
                         .fontWeight(.bold)
-                        .foregroundColor(.black) // Ensure title text is black
+                        .foregroundColor(.black)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
                     // Subtitle
                     Text("Join Redde Online and enjoy seamless transactions.")
                         .font(.subheadline)
-                        .foregroundColor(.gray)
+                        .foregroundColor(.black)
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.bottom, 20)
@@ -35,8 +45,9 @@ struct Registration: View {
                     // Form Fields
                     VStack(spacing: 15) {
                         // Email
-                        CustomTextField(placeholder: "Email address", text: $email)
-
+                        CustomTextField(text: $email, placeholder: "Email address")
+                           
+                        
                         // Account Type
                         Text("Account Type")
                             .font(.subheadline)
@@ -54,69 +65,18 @@ struct Registration: View {
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
 
-                        // Name
-                        CustomTextField(placeholder: "Name", text: $name)
-
-                        // Phone Number
-                        CustomTextField(placeholder: "Phone number", text: $phoneNumber)
-
-                        // Password
-                        VStack {
-                            ZStack(alignment: .trailing) {
-                                if isPasswordVisible {
-                                    TextField("Password", text: $password)
-                                        .padding()
-                                        .background(Color.white)
-                                        .cornerRadius(8)
-                                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1))
-                                        .foregroundColor(.black) // Set text color to black
-                                } else {
-                                    SecureField("Password", text: $password)
-                                        .padding()
-                                        .background(Color.white)
-                                        .cornerRadius(8)
-                                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1))
-                                        .foregroundColor(.black) // Set text color to black
-                                }
-                                Button(action: {
-                                    isPasswordVisible.toggle()
-                                }) {
-                                    Image(systemName: isPasswordVisible ? "eye.slash" : "eye")
-                                        .foregroundColor(.gray)
-                                        .padding(.trailing, 10)
-                                }
-                                .offset(x: -10)
-                            }
-                        }
-
-                        // Confirm Password
-                        VStack {
-                            ZStack(alignment: .trailing) {
-                                if isConfirmPasswordVisible {
-                                    TextField("Confirm password", text: $confirmPassword)
-                                        .padding()
-                                        .background(Color.white)
-                                        .cornerRadius(8)
-                                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1))
-                                        .foregroundColor(.black) // Set text color to black
-                                } else {
-                                    SecureField("Confirm password", text: $confirmPassword)
-                                        .padding()
-                                        .background(Color.white)
-                                        .cornerRadius(8)
-                                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1))
-                                        .foregroundColor(.black) // Set text color to black
-                                }
-                                Button(action: {
-                                    isConfirmPasswordVisible.toggle()
-                                }) {
-                                    Image(systemName: isConfirmPasswordVisible ? "eye.slash" : "eye")
-                                        .foregroundColor(.gray)
-                                        .padding(.trailing, 10)
-                                }
-                                .offset(x: -10)
-                            }
-                        }
+                        // Name and Phone
+                        CustomTextField(text: $name, placeholder: "Name")
+                        CustomTextField(text: $phoneNumber, placeholder: "Phone number")
+                        
+                        // Password fields
+                        CustomSecureField(text: $password,
+                                        placeholder: "Password",
+                                        isVisible: $isPasswordVisible)
+                        
+                        CustomSecureField(text: $confirmPassword,
+                                        placeholder: "Confirm password",
+                                        isVisible: $isConfirmPasswordVisible)
                     }
                     .padding(.horizontal)
 
@@ -124,7 +84,7 @@ struct Registration: View {
                     VStack(alignment: .leading, spacing: 5) {
                         Text("By clicking Sign Up, you agree to our ")
                             .font(.footnote)
-                            .foregroundColor(.gray)
+                            .foregroundColor(.black)
                             .multilineTextAlignment(.leading)
                         HStack(spacing: 3) {
                             Text("Terms of use")
@@ -136,7 +96,7 @@ struct Registration: View {
                                 }
                             Text("and that you have read our ")
                                 .font(.footnote)
-                                .foregroundColor(.gray)
+                                .foregroundColor(.black)
                             Text("Retention Policy")
                                 .font(.footnote)
                                 .foregroundColor(redColor)
@@ -148,7 +108,7 @@ struct Registration: View {
                         HStack(spacing: 3) {
                             Text(", including our ")
                                 .font(.footnote)
-                                .foregroundColor(.gray)
+                                .foregroundColor(.black)
                             Text("Anti-Money Laundering Policy")
                                 .font(.footnote)
                                 .foregroundColor(redColor)
@@ -173,22 +133,26 @@ struct Registration: View {
                     }
                     .padding(.horizontal)
 
-                    // Removed Login Link for now
+                    // Login Link
                     HStack {
                         Text("Already a member?")
                             .font(.footnote)
+                            .foregroundColor(.black)
                         Text("Click here to login.")
                             .font(.footnote)
                             .foregroundColor(redColor)
                             .onTapGesture {
-                                // Handle Login action or link when you're ready to re-implement it
+                                // Handle Login action
                             }
                     }
                     .padding(.top, 10)
                 }
                 .padding()
             }
-            .background(Color.white) // Set the background color to white
+            .background(Color.white)
+            .onAppear {
+                UITextField.appearance().tintColor = .black
+            }
             .alert(isPresented: $showError) {
                 Alert(
                     title: Text("Missing Fields"),
@@ -211,23 +175,67 @@ struct Registration: View {
 }
 
 struct CustomTextField: View {
-    var placeholder: String
     @Binding var text: String
-
+    let placeholder: String
+    
     var body: some View {
         ZStack(alignment: .leading) {
             if text.isEmpty {
                 Text(placeholder)
-                    .foregroundColor(.gray) // Set the placeholder color to gray
-                    .padding(.leading, 10) // Optional padding to adjust the position of the placeholder
+                    .foregroundColor(.black) // Explicitly set placeholder text color to black
+                    .padding(.leading, 8)
             }
             TextField("", text: $text)
+                .foregroundColor(.black) // Ensure entered text is black
                 .padding()
                 .background(Color.white)
                 .cornerRadius(8)
-                .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray, lineWidth: 1))
-                .foregroundColor(.black) // Set text color to black
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.gray, lineWidth: 1)
+                )
         }
+        .frame(height: 50) // Set a fixed height for better alignment
+    }
+}
+
+struct CustomSecureField: View {
+    @Binding var text: String
+    let placeholder: String
+    @Binding var isVisible: Bool
+    
+    var body: some View {
+        ZStack(alignment: .trailing) {
+            if isVisible {
+                CustomTextField(text: $text, placeholder: placeholder)
+            } else {
+                ZStack(alignment: .leading) {
+                    if text.isEmpty {
+                        Text(placeholder)
+                            .foregroundColor(.black) // Explicitly set placeholder text color to black
+                            .padding(.leading, 8)
+                    }
+                    SecureField("", text: $text)
+                        .foregroundColor(.black) // Ensure entered text is black
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(8)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.gray, lineWidth: 1)
+                        )
+                }
+            }
+            
+            Button(action: {
+                isVisible.toggle()
+            }) {
+                Image(systemName: isVisible ? "eye.slash" : "eye")
+                    .foregroundColor(.gray)
+                    .padding(.trailing, 10)
+            }
+        }
+        .frame(height: 50) // Set a fixed height for better alignment
     }
 }
 
