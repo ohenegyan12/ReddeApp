@@ -2,6 +2,7 @@ import SwiftUI
 
 // MARK: - Password View
 struct PasswordView: View {
+    @Environment(\.dismiss) private var dismiss
     @State private var password: String = ""
     @State private var isPasswordVisible: Bool = false
     @State private var showAlert: Bool = false
@@ -15,7 +16,7 @@ struct PasswordView: View {
                 // Back Button
                 HStack {
                     Button(action: {
-                        NavigationUtil.popToRootView()
+                        dismiss()
                     }) {
                         Image(systemName: "chevron.left")
                             .font(.title2)
@@ -138,7 +139,7 @@ struct PasswordView: View {
 
 // MARK: - Success Alert View
 struct SuccessAlert: View {
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @Binding var showLoginView: Bool
     
     var body: some View {
@@ -197,7 +198,6 @@ struct ForgotPassword: View {
     @State private var phoneNumber: String = ""
     @Environment(\.dismiss) private var dismiss
     @State private var navigateToOTP = false
-    @Environment(\.presentationMode) var presentationMode
     @State private var showSuccessAlert = false
     @State private var showLoginView = false
     
@@ -206,7 +206,7 @@ struct ForgotPassword: View {
             VStack(alignment: .leading, spacing: 0) {
                 // Back Button
                 Button(action: {
-                    presentationMode.wrappedValue.dismiss()
+                    dismiss()
                 }) {
                     Image(systemName: "chevron.left")
                         .font(.title2)
@@ -298,14 +298,6 @@ struct OTP: View {
     }
 }
 
-// MARK: - Navigation Utility
-struct NavigationUtil {
-    static func popToRootView() {
-        guard let rootViewController = UIApplication.shared.windows.first?.rootViewController else { return }
-        rootViewController.dismiss(animated: true, completion: nil)
-    }
-}
-
 // MARK: - Color Extension
 extension Color {
     init(hex: String) {
@@ -333,7 +325,6 @@ extension Color {
     }
 }
 
-// MARK: - Previews
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         PasswordView()
