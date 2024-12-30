@@ -1,12 +1,16 @@
 import SwiftUI
-import UIKit
 
-extension UIApplication {
-    func addTapGestureRecognizer() {
-        guard let window = windows.first else { return }
-        let tapGesture = UITapGestureRecognizer(target: window, action: #selector(UIView.endEditing))
-        tapGesture.cancelsTouchesInView = false
-        window.addGestureRecognizer(tapGesture)
+// Extension for placeholder functionality
+extension View {
+    func placeholder<Content: View>(
+        when shouldShow: Bool,
+        alignment: Alignment = .leading,
+        @ViewBuilder placeholder: () -> Content
+    ) -> some View {
+        ZStack(alignment: alignment) {
+            placeholder().opacity(shouldShow ? 1 : 0)
+            self
+        }
     }
 }
 
@@ -33,7 +37,7 @@ struct Registration: View {
                         .fontWeight(.bold)
                         .foregroundColor(.black)
                         .frame(maxWidth: .infinity, alignment: .leading)
-
+ 
                     // Subtitle
                     Text("Join Redde Online and enjoy seamless transactions.")
                         .font(.subheadline)
@@ -47,7 +51,6 @@ struct Registration: View {
                         // Email
                         CustomTextField(text: $email, placeholder: "Email address")
                            
-                        
                         // Account Type
                         Text("Account Type")
                             .font(.subheadline)
@@ -150,9 +153,6 @@ struct Registration: View {
                 .padding()
             }
             .background(Color.white)
-            .onAppear {
-                UITextField.appearance().tintColor = .black
-            }
             .alert(isPresented: $showError) {
                 Alert(
                     title: Text("Missing Fields"),
@@ -179,23 +179,20 @@ struct CustomTextField: View {
     let placeholder: String
     
     var body: some View {
-        ZStack(alignment: .leading) {
-            if text.isEmpty {
+        TextField("", text: $text)
+            .placeholder(when: text.isEmpty) {
                 Text(placeholder)
-                    .foregroundColor(.black) // Explicitly set placeholder text color to black
-                    .padding(.leading, 8)
+                    .foregroundColor(.black.opacity(0.6))
             }
-            TextField("", text: $text)
-                .foregroundColor(.black) // Ensure entered text is black
-                .padding()
-                .background(Color.white)
-                .cornerRadius(8)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.gray, lineWidth: 1)
-                )
-        }
-        .frame(height: 50) // Set a fixed height for better alignment
+            .foregroundColor(.black)
+            .padding()
+            .background(Color.white)
+            .cornerRadius(8)
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color.gray, lineWidth: 1)
+            )
+            .frame(height: 50)
     }
 }
 
@@ -207,24 +204,17 @@ struct CustomSecureField: View {
     var body: some View {
         ZStack(alignment: .trailing) {
             if isVisible {
-                CustomTextField(text: $text, placeholder: placeholder)
-            } else {
-                ZStack(alignment: .leading) {
-                    if text.isEmpty {
+                TextField("", text: $text)
+                    .placeholder(when: text.isEmpty) {
                         Text(placeholder)
-                            .foregroundColor(.black) // Explicitly set placeholder text color to black
-                            .padding(.leading, 8)
+                            .foregroundColor(.black.opacity(0.6))
                     }
-                    SecureField("", text: $text)
-                        .foregroundColor(.black) // Ensure entered text is black
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(8)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.gray, lineWidth: 1)
-                        )
-                }
+            } else {
+                SecureField("", text: $text)
+                    .placeholder(when: text.isEmpty) {
+                        Text(placeholder)
+                            .foregroundColor(.black.opacity(0.6))
+                    }
             }
             
             Button(action: {
@@ -232,10 +222,18 @@ struct CustomSecureField: View {
             }) {
                 Image(systemName: isVisible ? "eye.slash" : "eye")
                     .foregroundColor(.gray)
-                    .padding(.trailing, 10)
             }
+            .padding(.trailing, 10)
         }
-        .frame(height: 50) // Set a fixed height for better alignment
+        .foregroundColor(.black)
+        .padding()
+        .background(Color.white)
+        .cornerRadius(8)
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(Color.gray, lineWidth: 1)
+        )
+        .frame(height: 50)
     }
 }
 
