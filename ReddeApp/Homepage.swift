@@ -99,6 +99,24 @@ struct HomePage: View {
                                 amount: -234,
                                 isDebit: true
                             )
+                            TransactionRow(
+                                name: "Albert Flores",
+                                accountNumber: "4554 3321 1209 9981",
+                                amount: -234,
+                                isDebit: true
+                            )
+                            TransactionRow(
+                                name: "Esther Howard",
+                                accountNumber: "6553 8754 3322 2235",
+                                amount: 72,
+                                isDebit: false
+                            )
+                            TransactionRow(
+                                name: "Esther Howard",
+                                accountNumber: "6553 8754 3322 2235",
+                                amount: 72,
+                                isDebit: false
+                            )
                         }
                     }
                     .padding(.horizontal)

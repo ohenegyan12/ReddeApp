@@ -4,6 +4,7 @@ struct OTPView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var otpCode: String = ""
     @State private var showError: Bool = false
+    @State private var navigateToHome: Bool = false
     
     // Validation state
     @State private var isInputValid: Bool = true
@@ -96,6 +97,9 @@ struct OTPView: View {
         .padding(.horizontal, 20)
         .navigationBarHidden(true)
         .background(Color.white)
+        .fullScreenCover(isPresented: $navigateToHome) {
+            HomePage()
+        }
         .alert("Invalid Input", isPresented: $showError) {
             Button("OK", role: .cancel) {}
         } message: {
@@ -110,8 +114,19 @@ struct OTPView: View {
             return
         }
         
-        // Add your submission logic here
-        // You can add additional validation for alpha/numeric/alphanumeric if needed
+        // If validation passes, navigate to HomePage
+        navigateToHome = true
+    }
+}
+
+struct Homepage: View {
+    var body: some View {
+        NavigationView {
+            VStack {
+                Text("Welcome to HomePage")
+            }
+            .navigationBarHidden(true)
+        }
     }
 }
 
